@@ -1,0 +1,17 @@
+[
+  {"id": "e1", "source": "n1", "target": "n3", "relation": "参与"},
+  {"id": "e2", "source": "n1", "target": "n5", "relation": "推荐"},
+  {"id": "e3", "source": "n2", "target": "n6", "relation": "指导"},
+  {"id": "e4", "source": "n3", "target": "n4", "relation": "衍生"},
+  {"id": "e5", "source": "n3", "target": "n7", "relation": "需要"},
+  {"id": "e6", "source": "n4", "target": "n10", "relation": "需要"},
+  {"id": "e7", "source": "n4", "target": "n8", "relation": "依赖"},
+  {"id": "e8", "source": "n5", "target": "n4", "relation": "启发"},
+  {"id": "e9", "source": "n5", "target": "n6", "relation": "关联"},
+  {"id": "e10", "source": "n6", "target": "n9", "relation": "属于"},
+  {"id": "e11", "source": "n6", "target": "n3", "relation": "应用于"},
+  {"id": "e12", "source": "n7", "target": "n3", "relation": "服务于"},
+  {"id": "e13", "source": "n8", "target": "n10", "relation": "支撑"},
+  {"id": "e14", "source": "n9", "target": "n3", "relation": "指导"},
+  {"id": "e15", "source": "n10", "target": "n4", "relation": "服务于"}
+]

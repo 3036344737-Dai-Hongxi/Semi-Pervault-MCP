@@ -1,0 +1,22 @@
+[
+  {"id": 1, "text": "今天和产品团队讨论了新的用户反馈系统，决定采用实时推送方案", "timestamp": "2026-03-26T09:30:00Z", "status": "active", "tags": ["工作", "产品"]},
+  {"id": 2, "text": "读完了《思考，快与慢》第三章，关于启发式偏见的内容很有启发", "timestamp": "2026-03-25T21:15:00Z", "status": "active", "tags": ["阅读", "心理学"]},
+  {"id": 3, "text": "学习了 FastAPI 的依赖注入系统，比 Flask 优雅很多", "timestamp": "2026-03-25T14:00:00Z", "status": "active", "tags": ["学习", "Python"]},
+  {"id": 4, "text": "和小王约了下周三一起吃饭，讨论创业想法", "timestamp": "2026-03-24T18:45:00Z", "status": "pending", "tags": ["社交", "创业"]},
+  {"id": 5, "text": "发现了一个很好的 Tailwind CSS 组件库 shadcn/ui，准备集成到项目中", "timestamp": "2026-03-24T11:20:00Z", "status": "completed", "tags": ["技术", "前端"]},
+  {"id": 6, "text": "完成了季度 OKR 复盘，本季度完成率 85%", "timestamp": "2026-03-23T16:30:00Z", "status": "completed", "tags": ["工作", "复盘"]},
+  {"id": 7, "text": "晨跑 5 公里，配速 5:30，状态不错", "timestamp": "2026-03-23T07:00:00Z", "status": "active", "tags": ["运动", "健康"]},
+  {"id": 8, "text": "研究了 RAG 技术在知识管理中的应用，整理了笔记", "timestamp": "2026-03-22T20:00:00Z", "status": "active", "tags": ["AI", "技术"]},
+  {"id": 9, "text": "项目 Alpha 的第一版原型通过了团队评审", "timestamp": "2026-03-22T15:00:00Z", "status": "completed", "tags": ["工作", "项目"]},
+  {"id": 10, "text": "学会了一道新菜：蒜蓉粉丝蒸虾，家人很喜欢", "timestamp": "2026-03-21T19:30:00Z", "status": "active", "tags": ["生活", "美食"]},
+  {"id": 11, "text": "参加了线上 Meetup，主题是 LLM 在企业中的落地实践", "timestamp": "2026-03-21T14:00:00Z", "status": "completed", "tags": ["学习", "AI"]},
+  {"id": 12, "text": "整理了书架，捐出了 15 本不再需要的书", "timestamp": "2026-03-20T10:00:00Z", "status": "completed", "tags": ["生活", "整理"]},
+  {"id": 13, "text": "给妈妈打了电话，她最近在学习手机摄影", "timestamp": "2026-03-19T20:30:00Z", "status": "active", "tags": ["家庭", "社交"]},
+  {"id": 14, "text": "设计了记忆图谱的数据模型，考虑用图数据库存储", "timestamp": "2026-03-19T11:00:00Z", "status": "active", "tags": ["技术", "设计"]},
+  {"id": 15, "text": "发现了一个关于认知科学的播客「大脑碎片」，已订阅", "timestamp": "2026-03-18T22:00:00Z", "status": "active", "tags": ["学习", "播客"]},
+  {"id": 16, "text": "完成了后端 API 的错误处理中间件", "timestamp": "2026-03-18T16:00:00Z", "status": "completed", "tags": ["工作", "后端"]},
+  {"id": 17, "text": "周末计划：去西湖边骑行 + 拍照", "timestamp": "2026-03-17T21:00:00Z", "status": "pending", "tags": ["生活", "计划"]},
+  {"id": 18, "text": "读了一篇关于 Second Brain 方法论的文章，对信息组织很有帮助", "timestamp": "2026-03-17T09:00:00Z", "status": "active", "tags": ["阅读", "效率"]},
+  {"id": 19, "text": "团队代码 Review 发现了一个潜在的 N+1 查询问题", "timestamp": "2026-03-16T14:30:00Z", "status": "completed", "tags": ["工作", "代码"]},
+  {"id": 20, "text": "尝试了番茄工作法，25 分钟专注 + 5 分钟休息，效果显著", "timestamp": "2026-03-16T10:00:00Z", "status": "active", "tags": ["效率", "方法"]}
+]

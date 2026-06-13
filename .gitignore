@@ -1,0 +1,37 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Database (local memory store)
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# AI agent / dev scratch — local working context, not part of the public project
+CURRENT.md
+CURRENT*.md
+SESSION_HANDOFF.md
+TASKS.md
+docs/fixproblem.md
+docs/fix-checklist.md
+docs/tasks2.md

@@ -1,0 +1,33 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "fastapi>=0.135.2",
+    "memory-core",
+    "openai>=2.30.0",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.22",
+    "sqlite-vec>=0.1.7",
+    "slowapi>=0.1.9",
+    "uvicorn[standard]>=0.42.0",
+    "websockets>=16.0",
+]
+
+[tool.uv.sources]
+memory-core = { path = "../packages/memory_core", editable = true }
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

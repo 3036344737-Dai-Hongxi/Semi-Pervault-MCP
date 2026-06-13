@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python-suites:
+    name: Python test suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: memory_core kernel suite (incl. import boundary guard)
+        working-directory: packages/memory_core
+        run: uv run --frozen python -m pytest tests/ -q
+
+      - name: backend daemon suite
+        working-directory: backend
+        run: uv run --frozen python -m pytest tests/ -q
+
+      - name: mcp_host unit suite (tool mapping, token)
+        working-directory: apps/mcp_host
+        run: uv run --frozen python -m pytest tests/ -q --ignore=tests/e2e_roundtrip.py
+
+# 说明：真实链路 E2E（apps/mcp_host/tests/e2e_roundtrip.py）需要起常驻 daemon，
+# 属重型/有外部依赖，不纳入此快速 CI；单测层（含 import 边界守卫、token 权限、
+# 意图真源、provenance）已覆盖回归底线。

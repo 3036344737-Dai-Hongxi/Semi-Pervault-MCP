@@ -1,0 +1,12 @@
+[
+  {"id": "n1", "label": "小王", "type": "person", "description": "创业伙伴，产品经理背景"},
+  {"id": "n2", "label": "张教授", "type": "person", "description": "大学导师，认知科学方向"},
+  {"id": "n3", "label": "项目 Alpha", "type": "project", "description": "智能知识管理系统 MVP"},
+  {"id": "n4", "label": "记忆图谱", "type": "project", "description": "个人记忆可视化与检索工具"},
+  {"id": "n5", "label": "Second Brain", "type": "idea", "description": "构建个人第二大脑的方法论"},
+  {"id": "n6", "label": "RAG 知识检索", "type": "idea", "description": "基于检索增强生成的知识管理"},
+  {"id": "n7", "label": "优化后端性能", "type": "task", "description": "解决 N+1 查询，优化数据库访问"},
+  {"id": "n8", "label": "学习图数据库", "type": "task", "description": "研究 Neo4j / DGraph 在知识图谱中的应用"},
+  {"id": "n9", "label": "LLM 企业落地", "type": "idea", "description": "大语言模型在企业知识管理中的实践"},
+  {"id": "n10", "label": "设计数据模型", "type": "task", "description": "设计记忆图谱的核心数据模型"}
+]

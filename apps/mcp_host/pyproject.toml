@@ -1,0 +1,21 @@
+[project]
+name = "pervault-mcp"
+version = "0.1.0"
+description = "Pervault 记忆 MCP 服务器：把本地记忆 daemon 暴露给 Claude Desktop / Cursor 等 MCP 客户端（薄桥接，不开数据库、不跑后台）"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp>=1.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

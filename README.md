@@ -1,20 +1,65 @@
-# Semi-Pervault MCP
+<p align="center">
+  <img src="assets/readme/pixel-memory.svg" alt="Semi-Pervault MCP pixel memory banner" width="100%" />
+</p>
 
-> Local-first long-term memory for AI agents. Semi-Pervault MCP gives Claude Desktop, Cursor, and other MCP clients a private memory layer that lives on your machine.
+<h1 align="center">Semi-Pervault MCP</h1>
 
-Semi-Pervault MCP is a local-first memory server built around Pervault's four-layer memory architecture. It stores important facts, preferences, decisions, project context, and relationship notes in a local SQLite database, then exposes them as MCP tools for agentic workflows.
+<p align="center">
+  <strong>Local-first long-term memory for AI agents.</strong>
+  <br />
+  A private memory layer for Claude Desktop, Cursor, and any MCP-compatible client.
+</p>
+
+<p align="center">
+  <a href="https://modelcontextprotocol.io/"><img alt="MCP" src="https://img.shields.io/badge/MCP-ready-38bdf8?style=for-the-badge" /></a>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-34d399?style=for-the-badge" />
+  <img alt="Storage" src="https://img.shields.io/badge/SQLite-local--first-fbbf24?style=for-the-badge" />
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-a78bfa?style=for-the-badge" /></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a>
+  &nbsp;&middot;&nbsp;
+  <a href="#mcp-tools">MCP tools</a>
+  &nbsp;&middot;&nbsp;
+  <a href="#architecture">Architecture</a>
+  &nbsp;&middot;&nbsp;
+  <a href="#development">Development</a>
+</p>
+
+<br />
+
+Semi-Pervault MCP is a local memory server built around Pervault's four-layer memory architecture. It stores important facts, preferences, decisions, project context, and relationship notes in a local SQLite database, then exposes that memory as MCP tools for agentic workflows.
 
 The goal is simple: let your AI tools remember useful context across sessions without sending your private memory store to a hosted service.
 
+<br />
+
+## Why It Exists
+
+Most AI tools are brilliant in the moment and forgetful by design. Semi-Pervault MCP gives them a durable, inspectable memory surface:
+
+| Need | What Semi-Pervault Provides |
+|---|---|
+| Remember me across sessions | Long-term local storage for facts, preferences, decisions, and progress |
+| Recall the right context | Hybrid retrieval across facts, full text, embeddings, and graph context |
+| Keep memory explainable | Evidence trails, admission scores, and revision audit history |
+| Stay private by default | SQLite on your machine, with a loopback-only daemon |
+| Avoid MCP process fragility | A thin MCP bridge forwards to a resident daemon that owns background work |
+
+<br />
+
 ## What It Does
 
-- **Long-term memory storage** for facts, preferences, decisions, events, and project progress.
-- **Hybrid retrieval** across structured facts, full-text search, embeddings, and graph context.
-- **Persona extraction** for stable user traits, preferences, and recurring patterns.
-- **Knowledge graph context** for people, projects, topics, and relationships.
-- **Reflection generation** through a background sleep-agent style consolidation loop.
-- **Evidence tracing** so the system can explain why it believes something.
-- **Local-first privacy** with SQLite storage on your own machine.
+- **Stores long-term memory** for facts, preferences, decisions, events, relationships, and project state.
+- **Retrieves with hybrid search** across structured facts, full-text search, embeddings, and graph context.
+- **Builds stable persona context** from repeated preferences and high-confidence traits.
+- **Extracts knowledge graph links** between people, projects, topics, and events.
+- **Generates reflections** through a background consolidation loop.
+- **Explains beliefs** with supporting memories, confidence, admission scores, and audit trail.
+- **Keeps data local-first** with SQLite storage and a loopback daemon.
+
+<br />
 
 ## Architecture
 
@@ -26,18 +71,27 @@ This repository is the MCP product slice of the larger Pervault memory system. I
 | `backend/` | Resident FastAPI daemon. It owns HTTP APIs, auth, background jobs, and all writes to `data.db`. |
 | `packages/memory_core/` | Framework-free memory kernel: schema, models, write pipeline, retrieval, graph, persona, reflections, and consolidation. |
 
-Runtime flow:
-
 ```text
 MCP client
-  -> apps/mcp_host/server.py
-  -> http://127.0.0.1:8000 + X-Pervault-Token
-  -> backend daemon
-  -> memory_core
-  -> local SQLite
+    |
+    | stdio
+    v
+apps/mcp_host/server.py
+    |
+    | 127.0.0.1:8000 + X-Pervault-Token
+    v
+backend daemon
+    |
+    v
+memory_core
+    |
+    v
+local SQLite
 ```
 
 The MCP host intentionally does not open the database or run background loops. The backend daemon is the only writer of the local memory database.
+
+<br />
 
 ## MCP Tools
 
@@ -51,6 +105,8 @@ The MCP host intentionally does not open the database or run background loops. T
 | `reflections_list` | Read higher-level reflections generated by the background agent. |
 | `memory_why` | Explain a belief with supporting memories, scores, and audit trail. |
 | `memory_stats` | Show memory counts and admission statistics. |
+
+<br />
 
 ## Quick Start
 
@@ -69,7 +125,9 @@ cp .env.example .env
 uv run python -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-The daemon binds to `127.0.0.1` only. On first use it creates a local pairing token at:
+The daemon binds to `127.0.0.1` only.
+
+On first use it creates a local pairing token at:
 
 ```text
 ~/.pervault/core_token
@@ -104,19 +162,21 @@ Claude Desktop example:
 }
 ```
 
-You can find the `uv` path with:
+Find your `uv` path with:
 
 ```bash
 which uv
 ```
 
-Restart your MCP client after editing its config. See [`apps/mcp_host/README.md`](apps/mcp_host/README.md) for bridge-specific details.
+Restart your MCP client after editing its config.
+
+Bridge-specific details live in [`apps/mcp_host/README.md`](apps/mcp_host/README.md).
+
+<br />
 
 ## Configuration
 
 The backend config template is [`backend/.env.example`](backend/.env.example).
-
-Common settings:
 
 | Variable | Description |
 |---|---|
@@ -127,6 +187,22 @@ Common settings:
 | `CONSOLIDATION_SCHEDULER_ENABLED`, `WEIGHT_DECAY_SCHEDULER_ENABLED`, `SLEEP_AGENT_ENABLED` | Background maintenance toggles. |
 
 If embedding credentials are not configured, retrieval falls back to non-vector search paths.
+
+<br />
+
+## Project Map
+
+```text
+.
+├── apps/mcp_host/          # MCP stdio bridge
+├── backend/                # FastAPI daemon and HTTP routes
+├── packages/memory_core/   # Framework-free memory kernel
+├── docs/                   # Architecture and planning notes
+├── RUN.command             # macOS helper to start the daemon
+└── README.md
+```
+
+<br />
 
 ## Development
 
@@ -146,6 +222,8 @@ cd apps/mcp_host
 uv run python -m pytest -q --ignore=tests/e2e_roundtrip.py
 ```
 
+<br />
+
 ## Design Notes
 
 - The daemon is local-first and SQLite-first.
@@ -159,6 +237,8 @@ Further reading:
 - [`docs/derivative/01-架构改造方案.md`](docs/derivative/01-架构改造方案.md)
 - [`docs/plan/four-memory-architecture-integration-plan.md`](docs/plan/four-memory-architecture-integration-plan.md)
 - [`packages/memory_core/README.md`](packages/memory_core/README.md)
+
+<br />
 
 ## License
 

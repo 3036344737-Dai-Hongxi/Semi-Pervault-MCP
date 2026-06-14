@@ -95,7 +95,7 @@ The second question can use `memory_search`, `persona_get`, or `memory_why` depe
 
 ## Architecture
 
-This repository is the MCP product slice of the larger Pervault memory system. It is split into three boundaries:
+This repository is the MCP product slice of the larger Pervault memory system. The important design choice is that MCP is only a bridge. The resident backend daemon owns the database, the write pipeline, and all background intelligence.
 
 | Area | Role |
 |---|---|
@@ -103,25 +103,104 @@ This repository is the MCP product slice of the larger Pervault memory system. I
 | `backend/` | Resident FastAPI daemon. It owns HTTP APIs, auth, background jobs, and all writes to `data.db`. |
 | `packages/memory_core/` | Framework-free memory kernel: schema, models, write pipeline, retrieval, graph, persona, reflections, and consolidation. |
 
-```text
-MCP client
-    |
-    | stdio
-    v
-apps/mcp_host/server.py
-    |
-    | 127.0.0.1:8000 + X-Pervault-Token
-    v
-backend daemon
-    |
-    v
-memory_core
-    |
-    v
-local SQLite
+```mermaid
+flowchart TB
+  subgraph Clients["AI clients and local runtimes"]
+    Claude["Claude Desktop / Codex / Cursor<br/>model account or API configured"]
+    Local["OpenClaw / Hermes local runtime<br/>local model already running"]
+    Browser["Future browser extension"]
+    Web["Optional local web UI"]
+  end
+
+  subgraph Adapters["Thin adapters"]
+    MCP["apps/mcp_host/server.py<br/>MCP stdio bridge<br/>no DB, no background loops"]
+    HTTP["Browser or web HTTP clients"]
+  end
+
+  subgraph Daemon["backend resident memory daemon"]
+    FastAPI["backend/main.py<br/>FastAPI lifespan"]
+    CoreAPI["/core/* loopback API<br/>127.0.0.1 + X-Pervault-Token"]
+    CookieAPI["/api/* browser API<br/>session cookie auth"]
+    Runtime["MemoryRuntime<br/>background_jobs + consolidation<br/>weight_decay + sleep_agent"]
+  end
+
+  subgraph Kernel["packages/memory_core memory kernel"]
+    Store["memory_service<br/>store, update, facts, admission jobs"]
+    Retrieval["retrieval_context<br/>intent routing + hybrid retrieval"]
+    Graph["graph_pipeline + graph_retrieval<br/>entities and relationships"]
+    Persona["persona_service + sleep_agent<br/>stable user traits"]
+    Reflection["sleep_agent + provenance<br/>reflections and why explanations"]
+  end
+
+  subgraph Storage["Local SQLite: ~/.pervault/data.db"]
+    Items["memory_items<br/>raw episodic memories"]
+    Facts["structured_facts<br/>normalized facts"]
+    PersonaTable["user_persona<br/>stable traits"]
+    ReflectionTable["memory_reflection<br/>higher-level insights"]
+    GraphTables["graph_nodes + graph_edges<br/>knowledge graph"]
+    Search["memory_fts + vec_items<br/>FTS5 and vector index"]
+    Jobs["background_jobs + scheduler logs<br/>async enrichment"]
+  end
+
+  Providers["Optional OpenAI-compatible LLM and embedding providers<br/>enrichment, routing, embeddings"]
+
+  Claude --> MCP
+  Local --> MCP
+  Browser --> HTTP
+  Web --> HTTP
+  MCP --> CoreAPI
+  HTTP --> CoreAPI
+  HTTP --> CookieAPI
+  CoreAPI --> FastAPI
+  CookieAPI --> FastAPI
+  FastAPI --> Runtime
+  FastAPI --> Store
+  FastAPI --> Retrieval
+  FastAPI --> Graph
+  FastAPI --> Persona
+  FastAPI --> Reflection
+  Runtime --> Store
+  Runtime --> Graph
+  Runtime --> Persona
+  Runtime --> Reflection
+  Store --> Items
+  Store --> Facts
+  Store --> Jobs
+  Retrieval --> Items
+  Retrieval --> Facts
+  Retrieval --> Search
+  Retrieval --> GraphTables
+  Graph --> GraphTables
+  Persona --> PersonaTable
+  Reflection --> ReflectionTable
+  Store -.-> Providers
+  Runtime -.-> Providers
 ```
 
-The MCP host intentionally does not open the database or run background loops. The backend daemon is the only writer of the local memory database.
+### Architecture invariants
+
+| Invariant | Why it matters |
+|---|---|
+| One database writer | The backend daemon is the only process that writes to SQLite, so MCP client restarts cannot corrupt background work. |
+| Thin MCP bridge | `apps/mcp_host/server.py` only reads `~/.pervault/core_token` and calls `127.0.0.1:8000/core/*`. |
+| Runtime owns background work | `MemoryRuntime` starts the job worker, consolidation loop, weight decay, and sleep agent from one lifecycle point. |
+| Local auth is split by surface | MCP and local adapters use `X-Pervault-Token`; browser-facing `/api/*` routes use session cookies. |
+| Provider keys are optional | Basic memory storage works locally; LLM and embedding keys unlock enrichment, vector recall, persona extraction, graph extraction, and stronger reflections. |
+
+### Core data model
+
+| Layer | SQLite tables | Purpose |
+|---|---|---|
+| Layer 1: episodic memory | `memory_items` | Raw memories, source tags, weights, admission scores, revision state. |
+| Layer 2: structured facts | `structured_facts` | Normalized facts extracted from durable memories. |
+| Layer 3: persona | `user_persona` | Stable user traits backed by source memory evidence. |
+| Layer 4: reflections | `memory_reflection` | Higher-level insights generated by the sleep agent. |
+| Graph context | `graph_nodes`, `graph_edges` | Entity and relationship memory for people, projects, topics, and events. |
+| Retrieval indexes | `memory_fts`, `vec_items` | Full-text and vector search surfaces for hybrid recall. |
+| Evidence and audit | `memory_admission_log`, `preference_revision_log` | Admission evidence, confidence history, and correction trail. |
+| Async orchestration | `background_jobs`, scheduler logs | Persistent queue and run history for enrichment, consolidation, and sleep-agent work. |
+
+The write path is intentionally boring: tools and UI call the daemon, the daemon calls `memory_core`, and `memory_core` persists to local SQLite. That separation keeps the MCP process replaceable while the memory engine stays alive.
 
 <br />
 

@@ -20,9 +20,13 @@
 <p align="center">
   <a href="#quick-start">Quick start</a>
   &nbsp;&middot;&nbsp;
+  <a href="#use-cases">Use cases</a>
+  &nbsp;&middot;&nbsp;
   <a href="#mcp-tools">MCP tools</a>
   &nbsp;&middot;&nbsp;
   <a href="#architecture">Architecture</a>
+  &nbsp;&middot;&nbsp;
+  <a href="docs/launch-kit.md">Launch kit</a>
   &nbsp;&middot;&nbsp;
   <a href="#development">Development</a>
 </p>
@@ -58,6 +62,34 @@ Most AI tools are brilliant in the moment and forgetful by design. Semi-Pervault
 - **Generates reflections** through a background consolidation loop.
 - **Explains beliefs** with supporting memories, confidence, admission scores, and audit trail.
 - **Keeps data local-first** with SQLite storage and a loopback daemon.
+
+<br />
+
+## Use Cases
+
+Semi-Pervault MCP is most useful when your AI assistant needs continuity:
+
+| Use case | Example memory |
+|---|---|
+| Personal assistant context | "I prefer concise technical explanations with concrete next steps." |
+| Project continuity | "Semi-Pervault MCP uses a thin MCP bridge and a resident FastAPI daemon." |
+| Research and study notes | "I am studying data science and engineering at HKU." |
+| Decision tracking | "We chose SQLite-first storage to keep memory local and inspectable." |
+| Relationship and collaboration context | "Alice owns backend reliability decisions for Project X." |
+
+Try asking your MCP client:
+
+```text
+Remember that I am building a local-first memory MCP server called Semi-Pervault.
+```
+
+Then later:
+
+```text
+What do you remember about my memory MCP project, and why?
+```
+
+The second question can use `memory_search`, `persona_get`, or `memory_why` depending on the context.
 
 <br />
 
@@ -237,6 +269,7 @@ Further reading:
 - [`docs/derivative/01-架构改造方案.md`](docs/derivative/01-架构改造方案.md)
 - [`docs/plan/four-memory-architecture-integration-plan.md`](docs/plan/four-memory-architecture-integration-plan.md)
 - [`packages/memory_core/README.md`](packages/memory_core/README.md)
+- [`docs/launch-kit.md`](docs/launch-kit.md)
 
 <br />
 

@@ -33,7 +33,7 @@
       }
       .title {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-        font-size: 54px;
+        font-size: 50px;
         font-weight: 800;
         fill: #f8fafc;
         letter-spacing: 2px;
@@ -70,10 +70,10 @@
       @keyframes travel {
         0% { transform: translate(0, 0); opacity: 0; }
         8% { opacity: 1; }
-        30% { transform: translate(210px, 0); opacity: 1; }
-        55% { transform: translate(410px, 0); opacity: 1; }
-        78% { transform: translate(610px, 0); opacity: 1; }
-        100% { transform: translate(780px, 0); opacity: 0; }
+        35% { transform: translate(110px, 0); opacity: 1; }
+        65% { transform: translate(270px, 0); opacity: 1; }
+        88% { transform: translate(330px, 0); opacity: 1; }
+        100% { transform: translate(350px, 0); opacity: 0; }
       }
       @media (prefers-reduced-motion: reduce) {
         .pulse, .spark, .cursor { animation: none; }
@@ -99,13 +99,13 @@
 
   <text x="112" y="147" class="small">LOCAL-FIRST MEMORY LAYER</text>
   <text x="112" y="211" class="title">Semi-Pervault MCP<tspan class="cursor">_</tspan></text>
-  <text x="114" y="254" class="subtitle">private long-term memory for AI agents, backed by SQLite</text>
+  <text x="114" y="254" class="subtitle">private long-term memory for AI agents</text>
 
   <g transform="translate(118 298)">
     <rect class="tile pulse" x="0" y="0" width="32" height="32" fill="#38bdf8"/>
     <rect class="tile pulse two" x="48" y="0" width="32" height="32" fill="#34d399"/>
     <rect class="tile pulse three" x="96" y="0" width="32" height="32" fill="#a78bfa"/>
-    <text x="150" y="23" class="small">store -> retrieve -> explain</text>
+    <text x="150" y="23" class="small">SQLite-backed -> store -> retrieve -> explain</text>
   </g>
 
   <g transform="translate(728 126)">
